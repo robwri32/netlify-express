@@ -42,7 +42,7 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/test.html");
 });
 
-app.route('/show')
+router.route('/show')
   .get((req, res) => {
     results.find({}, (err, results) => {
       res.json(results)
