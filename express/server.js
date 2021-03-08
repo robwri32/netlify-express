@@ -38,16 +38,29 @@ const lhDataSchema = new mongoose.Schema({
 });
 const results = mongoose.model("results", lhDataSchema);
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/test.html");
-});
+// app.get("/", (req, res) => {
+//   res.sendFile(__dirname + "/test.html");
+// });
 
-router.route('/show')
+app.route('/show')
   .get((req, res) => {
     results.find({}, (err, results) => {
       res.json(results)
     })
   });
+// app.use('/show2', (req, res) => res.sendFile(path.join(__dirname, '../index.html')));
+// app.use('/show')
+//   .get((req, res) => {
+//     results.find({}, (err, results) => {
+//       res.json(results)
+//     })
+//   });
+//
+// router.get('/another', (req, res) => {
+//   results.find({}, (err, results) => {
+//     res.json(results)
+//   })
+// });
 // app.get('/show', (req, res) => {
 //   res.json([
 //     {
@@ -63,23 +76,11 @@ router.route('/show')
 //   ])
 // });
 
-router.post("/addname", (req, res) => {
-
-  const myData = new results(req.body);
-  // console.log(typeof(myData));
-  let myData2 = JSON.stringify(myData);
-  myData.save()
-    .then(myData2 => {
-      res.send("Lighthouse Data Saved to DB");
-    })
-    .catch(err => {
-      res.status(400).send("Unable to save to database");
-    });
-});
 
 app.use(bodyParser.json());
 app.use('/.netlify/functions/server', router);  // path must route to lambda
-app.use('/', (req, res) => res.sendFile(path.join(__dirname, '../index.html')));
+
+app.use('/show', (req, res) => res.json());
 
 module.exports = app;
 module.exports.handler = serverless(app);
